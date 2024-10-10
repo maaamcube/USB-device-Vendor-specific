@@ -9,9 +9,9 @@
 /**********************************************************************************************/
 // Configuration de la version de plate forme
 /**********************************************************************************************/
-//#define FOOTLYSER_V8_S                      1
-//#define FOOTLYSER_V8_M                      1
-//#define FOOTLYSER_V8_L                    1
+//#define V8_S                      1
+//#define V8_M                      1
+//#define V8_L                      1
 
 //#define EXTERNAL_FLASH_IS_PRESENT           1
 
@@ -19,8 +19,8 @@
 /**********************************************************************************************/
 // Message d'erreur empechant la compilation en cas de selection multiple
 /**********************************************************************************************/
-/*#if ((FOOTLYSER_V8_S && FOOTLYSER_V8_M) || (FOOTLYSER_V8_S && FOOTLYSER_V8_L) || (FOOTLYSER_V8_M && FOOTLYSER_V8_L))
-  "Error : le projet ne peut être compilé qu'avec un seul type de plate-forme"
+/*#if ((V8_S && V8_M) || (V8_S && V8_L) || (V8_M && V8_L))
+  "Error : le projet ne peut Ãªtre compilÃ© qu'avec un seul type de plate-forme"
 #endif*/
 
 
@@ -39,7 +39,7 @@
 #define HARD_REV_SUB_MINOR  '0' //'4'
 #endif
 
-#ifdef FOOTLYSER_V8_S
+#ifdef V8_S
 // S
   #define PRODUCT_PID                         0x7000
   #define PRODUCT_STRING						{ 'P','0','4','k','6',HARD_REV_MAJOR,HARD_REV_MINOR,HARD_REV_SUB_MINOR }
@@ -49,13 +49,13 @@
 
 #endif
 
-#ifdef FOOTLYSER_V8_M
+#ifdef V8_M
 // M
   #define PRODUCT_PID                         0x7001
   #define PRODUCT_STRING                      { 'P','4','9','k','6',HARD_REV_MAJOR,HARD_REV_MINOR,HARD_REV_SUB_MINOR }
 #endif
 
-#ifdef FOOTLYSER_V8_L
+#ifdef V8_L
 // L
   #define PRODUCT_PID                         0x7002
   #define PRODUCT_STRING                      { 'P','5','0','k','6',HARD_REV_MAJOR,HARD_REV_MINOR,HARD_REV_SUB_MINOR }
@@ -135,7 +135,7 @@
 											ADC_CFGR_DISCEN)
 
 
-// Reglage du sample & hod time (duree entre le front montant du signal ADC_TRIG et le début de conversion ADC)
+// Reglage du sample & hod time (duree entre le front montant du signal ADC_TRIG et le dÃ©but de conversion ADC)
 // Une seule des 5 lignes sans commentaires !!!
 // 1.5 ADC clock cycles - defaut V7
 // 31.25ns
