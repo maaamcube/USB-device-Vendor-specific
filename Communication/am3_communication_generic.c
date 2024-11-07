@@ -120,7 +120,7 @@ Temps[4] = chVTGetSystemTime() ;
 // Mise a jour du check dans la trame
   int_to_be(check, &am3_zip.zip_buffer[8]) ;
 
-// Ajout du nombre de mesure zipees envoyées
+// Ajout du nombre de mesure zipees envoyÃ©es
   int_to_be(CtrMesures, &am3_zip.zip_buffer[16]) ;
 
   if (CtrMesures == 0)  int_to_be(0, &am3_zip.zip_buffer[20]) ;
@@ -132,111 +132,7 @@ Temps[4] = chVTGetSystemTime() ;
 
   am3_zip.overflow = false ;
 
-// Autre blocs de données à envoyer ?
-  /*if (am3_zip.overflow == true)
-  {
-    uint16_t ctrMesures, pointeur ;
-    uint8_t *ptrM ;
-    uint8_t *ptrS ;
-    uint8_t mesure, seuil ;
 
-    // revoir la gestion de multi-bloc//////////////////////////////////////////////
-
-#ifdef FOOTLYSER_V8_S
-      ptrS = (uint8_t *)(AdresseSeuilCalibration + am3_zip.lastAddress) ;
-#elif FOOTLYSER_V8_M
-    // Plate forme M : 2 cartes capteur : 4096 + 2048
-      if (PositionCarte == POSITION_0)
-      {
-        ptrS = (uint8_t *)(AdresseSeuilCalibration + am3_zip.lastAddress) ;
-      }
-      else if (PositionCarte == POSITION_1)
-      {
-        ptrS = (uint8_t *)(AdresseSeuilCalibration + am3_zip.lastAddress + 4096) ;
-      }
-#elif FOOTLYSER_V8_L
-    // Plate forme L : 3 cartes capteur : 4096 + 4096 + 4096
-      if (PositionCarte == POSITION_0)
-      {
-        ptrS = (uint8_t *)(AdresseSeuilCalibration + am3_zip.lastAddress) ;
-      }
-      else if (PositionCarte == POSITION_1)
-      {
-        ptrS = (uint8_t *)(AdresseSeuilCalibration + am3_zip.lastAddress + 4096) ;
-      }
-      else if (PositionCarte == POSITION_2)
-      {
-        ptrS = (uint8_t *)(AdresseSeuilCalibration + am3_zip.lastAddress + 8192) ;
-      }
-#endif
-
-    do
-    {
-    // Incrémenter le numero de bloc pour le prochain envoi
-      check += 0x00010000 ;
-
-    // Compteur de mesure au sein d'un bloc remis à zéro
-      ctrMesures = 0 ;
-      pointeur = 20 ;
-
-      uint16_t index ;
-      ptrM = &BufferAcquisition[0][0]+am3_zip.lastAddress ;
-
-      am3_zip.overflow = false ;
-
-    // Attente de la fin d'une transmission USB (pour ne pas ecraser le buffer)
-      AttentFinDeTransmissionUSB() ;
-
-    // Par défaut, il s'agit du dernier bloc
-      check &= 0xFFFF0000 ;
-
-      for (index = am3_zip.lastAddress ; index < 4096 ; index ++)
-      {
-        mesure = *(uint8_t *)ptrM ;
-        seuil = *(uint8_t *)ptrS ;
-        ptrM++ ;
-        ptrS++ ;
-
-        if (mesure > seuil)
-        {
-          mesure -= seuil ;
-
-          am3_zip.zip_buffer[pointeur++] = (uint8_t)(index >> 8) ;
-          am3_zip.zip_buffer[pointeur++] = (uint8_t)index ;
-          am3_zip.zip_buffer[pointeur++] = mesure ;
-
-          ctrMesures ++ ;
-          if (ctrMesures == 1367)
-          {
-            am3_zip.overflow = true ;
-            am3_zip.lastAddress = (uint32_t)index+1 ;
-
-          // Il reste un bloc USB à envoyer
-            check &= 0xFFFF0000 ;
-            check += 0x00000001 ;
-
-           // Pour sortir
-            index = 5000 ;
-            break ;
-          }
-        }
-      }
-
-    // Mise a jour du check dans la trame
-      int_to_be(check, &am3_zip.zip_buffer[8]) ;
-
-    // Ajout du nombre de mesure zipees envoyées
-      int_to_be(ctrMesures, &am3_zip.zip_buffer[16]) ;
-
-    // Taille de la trame
-      am3_zip.current_com_buffer.bytes = (CtrMesures*3)+20 ;
-      am3_zip.current_com_buffer.buffer = &am3_zip.zip_buffer[0] ;
-      append_to_send_measure_fifo(&am3_zip.current_com_buffer);
-    } while (am3_zip.overflow == true) ;
-  }*/
-
-//  am3_zip.overflow = false ;
-//  am3_zip.lastAddress = 0 ;
 }
 
 /**********************************************************************************************/
@@ -265,15 +161,15 @@ Temps[4] = chVTGetSystemTime() ;
   int_to_be(am3_acquisition.time, &am3_zip.zip_buffer[4]) ;
 
 
-// Ajout des données
-#ifdef FOOTLYSER_V8_S
+// Ajout des donnÃ©es
+#ifdef V8_S
   if (PositionCarte == POSITION_0)
   {
       memcpy(&am3_zip.zip_buffer[8], &BufferAcquisition[0][0], 4096) ;
   }
 #endif
 
-#ifdef FOOTLYSER_V8_M
+#ifdef V8_M
 
   if (PositionCarte == POSITION_0)
   {
@@ -284,7 +180,7 @@ Temps[4] = chVTGetSystemTime() ;
   {
     uint32_t ptrRemplissage, ptrBuffer ;
     ptrRemplissage = 8 ;
-    ptrBuffer = 0 ;  // pour le nouvel ordre mettre à 0 (l'ancienne rotation = 32)
+    ptrBuffer = 0 ;  // pour le nouvel ordre mettre Ã  0 (l'ancienne rotation = 32)
 
     for (int t = 0 ; t < 64 ; t++)
     {
@@ -293,12 +189,12 @@ Temps[4] = chVTGetSystemTime() ;
         ptrBuffer += 64 ;
     }
 
-    // Taille de la trame : par défaut pour une S (4096), 2048 pour une M
+    // Taille de la trame : par dÃ©faut pour une S (4096), 2048 pour une M
       am3_zip.current_com_buffer.bytes = (USB_BUFFER_SIZE / 2) ;
   }
 #endif
 
-#ifdef FOOTLYSER_V8_L
+#ifdef V8_L
   if (PositionCarte == POSITION_0 ||PositionCarte == POSITION_1 || PositionCarte == POSITION_2)
    {
        memcpy(&am3_zip.zip_buffer[8], &BufferAcquisition[0][0], 4096) ;
@@ -486,7 +382,7 @@ void am3_init_communication(void)
 
 // Recherche du debut des seuils dans la table des calibrations
   AdresseSeuilCalibration = 0 ;
- // uint8_t offset_key[14] = {0x00, 0x4F,0x00, 0x46,0x00, 0x46,0x00, 0x53,0x00, 0x45,0x00, 0x54,0x00, 0x00} ; penser à supprimer les deux 0 de la fin
+ // uint8_t offset_key[14] = {0x00, 0x4F,0x00, 0x46,0x00, 0x46,0x00, 0x53,0x00, 0x45,0x00, 0x54,0x00, 0x00} ; penser Ã  supprimer les deux 0 de la fin
   uint8_t offset_key[14] = {0x00, 0x4F,0x00, 0x46,0x00, 0x46,0x00, 0x53,0x00, 0x45,0x00, 0x54,0x00, 0x00} ;
   uint16_t i=0 ;
   for (i=0 ; i<CALIBRATION_RESERVED ; i++)
